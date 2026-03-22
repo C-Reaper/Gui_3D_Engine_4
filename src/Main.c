@@ -106,7 +106,6 @@ float float_max(float a,float b){
 	return a>b ? a : b;
 }
 
-
 void TexturedTriangle(	int x1, int y1, float u1, float v1, float w1,
 						int x2, int y2, float u2, float v2, float w2,
 						int x3, int y3, float u3, float v3, float w3,
@@ -263,10 +262,9 @@ void Setup(AlxWindow* w){
 	fYaw = 0.0f;
 	fTheta = 0.0f;
 	
-	sprTex1 = Sprite_Load("./Atlas.png");
+	sprTex1 = Sprite_Load("./data/Atlas.png");
 	matProj = Matrix_MakeProjection(90.0f,(float)GetHeight() / (float)GetWidth(),0.1f,1000.0f);
 }
-
 void Update(AlxWindow* w){
 	if (Stroke(ALX_KEY_UP).DOWN)
 		vCamera.y += 8.0f * w->ElapsedTime;
@@ -444,7 +442,10 @@ void Update(AlxWindow* w){
 	}
 	Vector_Free(&vecTrianglesToRaster);
 }
-
+void Resize(AlxWindow* w){
+	if(pDepthBuffer) free(pDepthBuffer);
+	pDepthBuffer = malloc(sizeof(float) * GetWidth() * GetHeight());
+}
 void Delete(AlxWindow* w){
 	free(pDepthBuffer);
 
@@ -453,7 +454,7 @@ void Delete(AlxWindow* w){
 }
 
 int main(){
-    if(Create("3D Test Tex",2500,1200,1,1,Setup,Update,Delete))
+    if(CreateX("3D Test Tex",2500,1200,1,1,Setup,Update,Delete,Resize))
         Start();
     return 0;
 }
